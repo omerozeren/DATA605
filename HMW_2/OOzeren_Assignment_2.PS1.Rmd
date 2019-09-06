@@ -2,10 +2,21 @@
 title: "HMW 2-Problem Set 1"
 author: "Omer Ozeren"
 output:
-  word_document: default
-  html_document: default
+  word_document:
+    toc: yes
+    toc_depth: '6'
+  html_document:
+    highlight: tango
+    theme: cerulean
+    toc: yes
+    toc_depth: 6
+    toc_float: yes
 ---
+
 ![](./ps1.png)
+
+### Question 1 :
+
 ```{r}
 A = matrix(seq(1, 9), nrow=3, byrow = T)
 AT = matrix(seq(1, 9), nrow=3, byrow = F)
@@ -53,10 +64,10 @@ AT %*% A
 ```
 
 
-2) 
+ 
+### Question 2 :
 
-
-2) $A^T A = A A^T$ is true if $A$ is a diagonal matrix.So An identity matrix when transposed and multiplied to itself, are equal to each other.
+$A^T A = A A^T$ is true if $A$ is a diagonal matrix.So An identity matrix when transposed and multiplied to itself, are equal to each other.
 
 Let $A = \begin{bmatrix} a & 0 & 0 \\ 0 & b & 0 \\ 0 & 0 & c \end{bmatrix}$ then
 $A^T = \begin{bmatrix} a & 0 & 0 \\ 0 & b & 0 \\ 0 & 0 & c \end{bmatrix}$ therefore:

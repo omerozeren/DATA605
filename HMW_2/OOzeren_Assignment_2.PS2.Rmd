@@ -2,16 +2,22 @@
 title: "HMW 2-Problem Set 2"
 author: "Omer Ozeren"
 output:
-  word_document: default
-
+  word_document:
+    toc: yes
+    toc_depth: '6'
+  html_document:
+    highlight: tango
+    theme: cerulean
+    toc: yes
+    toc_depth: 6
+    toc_float: yes
 ---
 
-### Problem Set 2
 Write an R function to factorize a square matrix $A$ into LU or LDU, whichever you prefer.
 ![](./ps2.png)
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(tidy = TRUE)
 knitr::opts_chunk$set(warning = FALSE)
 load_package <- function(x) {
@@ -22,8 +28,8 @@ libs <- c("knitr", "magrittr", "data.table", "kableExtra", "tidyverse", "matlib"
 lapply(libs, load_package)
 ```
 
-
-```{r}
+## Function Set-Up
+```{r,include =TRUE}
 lu_function <- function(m) {
   mDims <- dim(m)
   
@@ -54,8 +60,6 @@ lu_function <- function(m) {
 ## Function Example
 ```{r}
 m1 <- matrix(seq(1, 9), nrow = 3)
-
-
 m2 <- matrix(sample(1:100, 9, replace=T), nrow = 3)
 ms <- list(m1, m2)
 lus <- ms %>%
