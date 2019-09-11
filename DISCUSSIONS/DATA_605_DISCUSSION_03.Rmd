@@ -1,0 +1,120 @@
+---
+title: "DATA 605 - Discussion 3"
+author: "Omer Ozeren"
+output:
+  html_document:
+    highlight: tango
+    theme: cerulean
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  word_document:
+    toc: yes
+    toc_depth: '6'
+---
+
+
+### Chapter E Section EE Exercise C24 -Page 388
+
+Find the eigenvalues, eigenspaces, algebraic and geometric multiplicities for 
+
+$$
+A = 
+\begin{bmatrix}
+  1 & -1 & 1 \\
+  -1 & 1 & -1 \\
+  1 & -1 & 1
+\end{bmatrix}
+$$
+
+### Solution
+
+```{r}
+A <- matrix(c(1,-1,1,-1,1,-1,1,-1,1), nrow=3, byrow=TRUE)
+A
+```
+
+#### **Eigenvalues**
+
+```{r}
+# Calculate characteristic polynomial using pracma library
+library(pracma)
+charpoly(A)
+```
+
+$p_A(x) = x^3-3x^2+0x+0 = x^2(x-3)$
+
+$p_A(\lambda) = 0$, so **eigenvalues** are $\lambda = 0$ and $\lambda = 3$.
+
+#### **Algebraic multiplicities**
+
+$\alpha_A(0) = 2$ and $\alpha_A(3) = 1$
+
+#### **Eigenspace**
+
+If $\lambda=0$, then $A - 0I_3 = A$ and it is row-reduced to 
+
+```{r}
+rref(A)
+```
+
+Then **eigenspace** is  
+$$
+ \Bigg\langle \Bigg\{
+ \begin{bmatrix}
+ 1\\
+ 1\\
+ 0
+ \end{bmatrix}
+ ,
+ \begin{bmatrix}
+ -1\\
+ 0\\
+ 1
+ \end{bmatrix}
+ \Bigg\} \Bigg \rangle
+$$
+
+If $\lambda=3$, then $A - 3I_3$ is row-reduced to 
+
+```{r}
+rref(A - 3 * diag(3))
+```
+
+Then **eigenspace** is  
+$$
+ \Bigg\langle \Bigg\{
+ \begin{bmatrix}
+ 1\\
+ -1\\
+ 1
+ \end{bmatrix}
+ \Bigg\} \Bigg \rangle
+$$
+
+#### **Geometric multiplicities**
+
+$\gamma_A(0) = 2$ and $\gamma_A(3) = 1$
+
+### Notes
+
+`eigen` function again returns a very small, near-zero value instead of $0$.
+
+```{r}
+eigen(A)$values
+```
+
+Additionally, per theorem DMFE since $\alpha_A(\lambda) = \gamma_A(\lambda)$ for all $\lambda$, then $A$ should be diagonalizable and eigenvalues should be on the diagonal. Consider $S$ consisting of eigenvectors.
+
+```{r}
+S <- matrix(c(1,-1,1,1,0,-1,0,1,1), nrow=3, byrow=TRUE)
+S
+```
+
+Compute $S^{-1}AS$
+
+```{r}
+inv(S) %*% A %*% S
+```
+
+Not considering near-zero values, everything checks out.
