@@ -30,7 +30,7 @@ A<- matrix(c(1,2,3,4,0,2,4,7,0,0,-4,-5/2,0,0,0,9/8), nrow= 4, ncol=4, byrow= TRU
 A
 ```
 
-**Answer: From the above matrix, its known that its dimension is 4x4 square matrix and lineary independent, therefore it rank is 4. We can also check the answer by running the below.**
+**Answer: From the above matrix, its known that its dimension is 4x4 square matrix and lineary independent, therefore it's rank is 4. We can also check the answer by running the below.**
 
 ```{r warning=FALSE}
 A1 <- matrix(c(1,2,3,4,-1,0,1,3,0,1,-2,1,5,4,-2,-3), nrow = 4, byrow = T)
@@ -98,7 +98,7 @@ $$\begin{bmatrix}0 &1 &0\\0 &0 &1\\0&0&0\end{bmatrix}\begin{bmatrix}v_1\\v_2\\v_
  
 Then $v_1=v_1$ and $v_2=0$ and $v_3=0$. The **EigenVector** is  
 
-$$E_{\lambda=1}=\Bigg\langle \Bigg\{\begin{bmatrix}1\\0\\0\end{bmatrix}\Bigg\} \Bigg \rangle$$
+$$E_{\lambda=1}=\begin{bmatrix}1\\0\\0\end{bmatrix}$$
 
 If $\lambda=4$, then $A - 4I_3$ is row-reduced to 
 
@@ -106,8 +106,7 @@ If $\lambda=4$, then $A - 4I_3$ is row-reduced to
 
 $$\begin{bmatrix}1 &-\frac{2}{3} &0\\0 &0 &1\\0&0&0\end{bmatrix}
   \begin{bmatrix}v_1\\v_2\\v_3\end{bmatrix}
-   =
-  \begin{bmatrix}0\\0\\0\end{bmatrix}$$
+   =\begin{bmatrix}0\\0\\0\end{bmatrix}$$
 
 Then $v_1 - \frac{2}{3}v_2=0$ and $v_3=0$. 
 
@@ -115,38 +114,13 @@ Or $v_1=v_1$ and $v_2=\frac{3}{2}v_1=1.5v_1$ and $v_3=0$.
 
 The **EigenVector** is  
 
-$$
- E_{\lambda=4}=
- \Bigg\langle \Bigg\{
- \begin{bmatrix}
- 1\\
- 1.5\\
- 0
- \end{bmatrix}
- \Bigg\} \Bigg \rangle
-$$
+$$E_{\lambda=4}=\begin{bmatrix}1\\1.5\\0\end{bmatrix}$$
 
 Finally, if $\lambda=6$, then $A - 6I_3$ is row-reduced to 
 
 
-$$
- \begin{bmatrix}
- 1 &0 &-1.6\\
- 0 &1 &-2.5\\
- 0&0&0
- \end{bmatrix}
- \begin{bmatrix}
- v_1\\
- v_2\\
- v_3
- \end{bmatrix}
- =
- \begin{bmatrix}
- 0\\
- 0\\
- 0
- \end{bmatrix}
-$$
+$$\begin{bmatrix}1 &0 &-1.6\\0 &1 &-2.5\\0&0&0\end{bmatrix}\begin{bmatrix}v_1\\v_2\\v_3\end{bmatrix}=
+ \begin{bmatrix}0\\0\\0\end{bmatrix}$$
 
 Then $v_1-1.6v_3=0$ and $v_2-2.5v_3=0$. 
 
@@ -154,13 +128,4 @@ Or $v_1=1.6v_3$ and $v_2=2.5v_3$ and $v_3=v_3$.
 
 The **EigenVector** is  
 
-$$
- E_{\lambda=6}=
- \Bigg\langle \Bigg\{
- \begin{bmatrix}
- 1.6\\
- 2.5\\
- 1
- \end{bmatrix}
- \Bigg\} \Bigg \rangle
-$$
+$$E_{\lambda=6}=\begin{bmatrix}1.6\\2.5\\1\end{bmatrix}$$

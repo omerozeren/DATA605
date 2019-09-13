@@ -356,7 +356,7 @@ A</code></pre></div>
 ## [2,]    0    2    4  7.000
 ## [3,]    0    0   -4 -2.500
 ## [4,]    0    0    0  1.125</code></pre>
-<p><strong>Answer: From the above matrix, its known that its dimension is 4x4 square matrix and lineary independent, therefore it rank is 4. We can also check the answer by running the below.</strong></p>
+<p><strong>Answer: From the above matrix, its known that its dimension is 4x4 square matrix and lineary independent, therefore it’s rank is 4. We can also check the answer by running the below.</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A1 &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="op">-</span><span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">4</span>,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">3</span>), <span class="dt">nrow =</span> <span class="dv">4</span>, <span class="dt">byrow =</span> T)
 decompA &lt;-<span class="st"> </span><span class="kw">qr</span>(A1)
 A1</code></pre></div>
@@ -413,57 +413,22 @@ M</code></pre></div>
 <p>If <span class="math inline">\(\lambda=1\)</span>, then <span class="math inline">\(A - 1I_3\)</span> is row-reduced to</p>
 <p><span class="math display">\[\begin{bmatrix}0 &amp;1 &amp;0\\0 &amp;0 &amp;1\\0&amp;0&amp;0\end{bmatrix}\begin{bmatrix}v_1\\v_2\\v_3\end{bmatrix}= \begin{bmatrix}0\\0\\0\end{bmatrix}\]</span></p>
 <p>Then <span class="math inline">\(v_1=v_1\)</span> and <span class="math inline">\(v_2=0\)</span> and <span class="math inline">\(v_3=0\)</span>. The <strong>EigenVector</strong> is</p>
-<p><span class="math display">\[E_{\lambda=1}=\Bigg\langle \Bigg\{\begin{bmatrix}1\\0\\0\end{bmatrix}\Bigg\} \Bigg \rangle\]</span></p>
+<p><span class="math display">\[E_{\lambda=1}=\begin{bmatrix}1\\0\\0\end{bmatrix}\]</span></p>
 <p>If <span class="math inline">\(\lambda=4\)</span>, then <span class="math inline">\(A - 4I_3\)</span> is row-reduced to</p>
 <p><span class="math display">\[\begin{bmatrix}1 &amp;-\frac{2}{3} &amp;0\\0 &amp;0 &amp;1\\0&amp;0&amp;0\end{bmatrix}
   \begin{bmatrix}v_1\\v_2\\v_3\end{bmatrix}
-   =
-  \begin{bmatrix}0\\0\\0\end{bmatrix}\]</span></p>
+   =\begin{bmatrix}0\\0\\0\end{bmatrix}\]</span></p>
 <p>Then <span class="math inline">\(v_1 - \frac{2}{3}v_2=0\)</span> and <span class="math inline">\(v_3=0\)</span>.</p>
 <p>Or <span class="math inline">\(v_1=v_1\)</span> and <span class="math inline">\(v_2=\frac{3}{2}v_1=1.5v_1\)</span> and <span class="math inline">\(v_3=0\)</span>.</p>
 <p>The <strong>EigenVector</strong> is</p>
-<p><span class="math display">\[
- E_{\lambda=4}=
- \Bigg\langle \Bigg\{
- \begin{bmatrix}
- 1\\
- 1.5\\
- 0
- \end{bmatrix}
- \Bigg\} \Bigg \rangle
-\]</span></p>
+<p><span class="math display">\[E_{\lambda=4}=\begin{bmatrix}1\\1.5\\0\end{bmatrix}\]</span></p>
 <p>Finally, if <span class="math inline">\(\lambda=6\)</span>, then <span class="math inline">\(A - 6I_3\)</span> is row-reduced to</p>
-<p><span class="math display">\[
- \begin{bmatrix}
- 1 &amp;0 &amp;-1.6\\
- 0 &amp;1 &amp;-2.5\\
- 0&amp;0&amp;0
- \end{bmatrix}
- \begin{bmatrix}
- v_1\\
- v_2\\
- v_3
- \end{bmatrix}
- =
- \begin{bmatrix}
- 0\\
- 0\\
- 0
- \end{bmatrix}
-\]</span></p>
+<p><span class="math display">\[\begin{bmatrix}1 &amp;0 &amp;-1.6\\0 &amp;1 &amp;-2.5\\0&amp;0&amp;0\end{bmatrix}\begin{bmatrix}v_1\\v_2\\v_3\end{bmatrix}=
+ \begin{bmatrix}0\\0\\0\end{bmatrix}\]</span></p>
 <p>Then <span class="math inline">\(v_1-1.6v_3=0\)</span> and <span class="math inline">\(v_2-2.5v_3=0\)</span>.</p>
 <p>Or <span class="math inline">\(v_1=1.6v_3\)</span> and <span class="math inline">\(v_2=2.5v_3\)</span> and <span class="math inline">\(v_3=v_3\)</span>.</p>
 <p>The <strong>EigenVector</strong> is</p>
-<p><span class="math display">\[
- E_{\lambda=6}=
- \Bigg\langle \Bigg\{
- \begin{bmatrix}
- 1.6\\
- 2.5\\
- 1
- \end{bmatrix}
- \Bigg\} \Bigg \rangle
-\]</span></p>
+<p><span class="math display">\[E_{\lambda=6}=\begin{bmatrix}1.6\\2.5\\1\end{bmatrix}\]</span></p>
 </div>
 
 
