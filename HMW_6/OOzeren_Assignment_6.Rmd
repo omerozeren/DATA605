@@ -1,0 +1,243 @@
+---
+title: "HMW 6- Data 605"
+author: "OMER OZEREN"
+output:
+  word_document:
+    toc: yes
+    toc_depth: '5'
+  html_document:
+    highlight: tango
+    theme: journal
+    toc: yes
+    toc_depth: 5
+    toc_float: yes
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Problem 1
+
+A box contains 54 red marbles, 9 white marbles, and 75 blue marbles. If a marble is randomly selected from the box,
+what is the probability that it is red or blue? Express your answer as a fraction or a decimal number rounded to four
+decimal places.
+
+### Answer
+
+$P(red\ or\ blue) = \frac{54+75}{54+9+75}=\frac{129}{138}\approx 0.9348$
+
+## Problem 2
+
+You are going to play mini golf. A ball machine that contains 19 green golf balls, 20 red golf balls, 24 blue golf balls, and
+17 yellow golf balls, randomly gives you your ball. What is the probability that you end up with a red golf ball? Express
+your answer as a simplified fraction or a decimal rounded to four decimal places.
+
+### Answer
+
+$P(red) = \frac{20}{19+20+24+17} = \frac{20}{80} = \frac{1}{4}=0.25$
+
+## Problem 3
+
+A pizza delivery company classifies its customers by gender and location of residence. The research department has
+gathered data from a random sample of 1,399 customers. The data is summarized in the table below.
+
+```{r}
+prob3 <- data.frame(male=c(81,116,215,130,129),
+                    female=c(228,79,252,97,72), 
+                    row.names = c("apartment","dorm","with parents","greek house","other"))
+prob3
+```
+
+What is the probability that a customer is not male or does not live with parents? Write your answer as a fraction or a decimal number rounded to four decimal places.
+
+### Answer
+
+Number of customers:
+```{r}
+cust_total <- sum(prob3)
+cust_total
+```
+
+The complement of customers who are not male or do not live with parents is customers who are male and live with parents, which is 215 customers. 
+
+$P(male\ AND\ live\ with\ parents) = \frac{215}{1399}$
+
+
+$P(not\ male\ OR\ do\ not\ live\ with\ parents) = 1-P(male\ AND\ live\ with\ parents) = 1 - \frac{215}{1399} = \frac{1184}{1399} \approx 0.8463$
+
+## Problem 4
+
+Determine if the following events are independent. Going to the gym. Losing weight.
+
+
+### Answer 
+
+Two events are independent if probability of one event is not affected by another event. In other words, if $A$ and $B$ are two events, then they are independent if $P(A) = P(A|B)$.
+
+
+It is a realistic assumption that $P(losing\ weight)$ will not be the same as $P(losing\ weight|going\ to\ gym)$, so events are likely **DEPENDENT**. Of course, without additional information we cannot be sure.
+
+## Problem 5
+
+A veggie wrap at City Subs is composed of 3 different vegetables and 3 different condiments wrapped up in a tortilla. If
+there are 8 vegetables, 7 condiments, and 3 types of tortilla available, how many different veggie wraps can be made?
+
+### Answer 
+
+Since repetition is not allowed (all vegetables and condiments must be different per stated problem), number of veggie wraps equals $8\times7\times6\times7\times6\times5\times3=211680$.
+
+## Problem 6
+
+Determine if the following events are independent.
+Jeff runs out of gas on the way to work. Liz watches the evening news. 
+
+### Answer
+
+Similarly to problem 4, it is a realistic assumption that Jeff running out of gas has no influence on Liz watching the news. $P(Liz\ watches\ the\ evening\ news)=P(Liz\ watches\ the\ evening\ news|Jeff\ runs\ out\ of\ gas\ on\ the\ way\ to\ work)$, so events are likely **INDEPENDENT**. Of course, without additional information we cannot be sure (for instance, Liz and Jeff can be related and Jeff's morning commute may influence Liz's evening schedule).
+
+## Problem 7
+
+The newly elected president needs to decide the remaining 8 spots available in the cabinet he/she is appointing. If there
+are 14 eligible candidates for these positions (where rank matters), how many different ways can the members of the
+cabinet be appointed?
+
+### Answer
+
+Since rank (order) matters, then number of ways equals $14\times13\times12\times11\times10\times9\times8\times7=121080960$.
+
+## Problem 8
+
+A bag contains 9 red, 4 orange, and 9 green jellybeans. What is the probability of reaching into the bag and randomly
+withdrawing 4 jellybeans such that the number of red ones is 0, the number of orange ones is 1, and the number of green
+ones is 3? Write your answer as a fraction or a decimal number rounded to four decimal places.
+
+### Answer
+
+The bag contains 22 jellybeans. Since the order of selected jellybeans does not matter the number of possible combinations is ${{22}\choose{4}}=7315$ (using `choose(22,4)`). The number of possible combinations of 3 out of 9 green jellybeans is ${{9}\choose{3}}=84$ (using `choose(9,3)`), so the number of possible combinatios of 3 out of 9 green jellybeans and 1 out of 4 orange jellybeans is $84\times4=336$.
+
+
+$P(0\ red,\ 1\ orange,\ 3\ green) = \frac{336}{7315} \approx 0.0459$
+
+## Problem 9
+
+Evaluate the following expression. $\frac{11!}{7!}$
+
+### Answer 
+
+```{r}
+factorial(11)/factorial(7)
+```
+
+## Problem 10
+
+Describe the complement of the given event.
+67% of subscribers to a fitness magazine are over the age of 34.
+
+### Answer
+
+The complement is **33% of subscribers to a fitness magazine are 34 years old or younger**.
+
+## Problem 11
+
+If you throw exactly three heads in four tosses of a coin you win \$97. If not, you pay me \$30.
+*Step 1.* Find the expected value of the proposition. Round your answer to two decimal places.
+*Step 2.* If you played this game 559 times how much would you expect to win or lose? (Losses must be entered as
+negative.)
+
+### Answer
+
+A win is 3 heads in 4 tosses of a coin. 
+
+$P(win)=\frac{4}{2^4}=\frac{4}{16}=\frac{1}{4}=0.25$.
+
+$P(loss)=1-P(win)=0.75$. 
+
+The return on a win is \$97. The return on a loss is -\$30.
+
+
+*Step 1.* Expected value is $97\times0.25-30\times0.75=1.75$.
+
+*Step 2.* After 559 times, the expectation will be $559\times1.75=978.25$. I would expect to win \$978.25.
+
+## Problem 12
+
+Flip a coin 9 times. If you get 4 tails or less, I will pay you \$23. Otherwise you pay me \$26.
+*Step 1.* Find the expected value of the proposition. Round your answer to two decimal places.
+*Step 2.* If you played this game 994 times how much would you expect to win or lose? (Losses must be entered as
+negative.)
+
+### Answer
+
+A win is 4 or less tails out of 9 tosses of a coin.
+
+Number of no tails is $1$. Number of 1 tail is $9$. Number of 2 tails is ${{9}\choose{2}}=36$. Number of 3 tails is ${{9}\choose{3}}=84$. Number of 4 tails is ${{9}\choose{4}}=126$
+
+$P(win)=\frac{1+9+36+84+126}{2^9}=\frac{256}{512}=\frac{1}{2}=0.5$.
+
+$P(loss)=1-P(win)=0.5$.
+
+The return on a win is \$23. The return on a loss is -\$26.
+
+
+
+*Step 1.* Expected value is $23\times0.5-26\times0.5=-1.50$.
+
+*Step 2.* After 994 times, the expectation will be $994\times(-1.5)=-1491$. I would expect to loose \$1,491.00.
+
+## Problem 13
+
+The sensitivity and specificity of the polygraph has been a subject of study and debate for years. A 2001 study of the
+use of polygraph for screening purposes suggested that the probability of detecting a liar was .59 (sensitivity) and that
+the probability of detecting a "truth teller" was .90 (specificity). We estimate that about 20% of individuals selected for
+the screening polygraph will lie.
+
+a. What is the probability that an individual is actually a liar given that the polygraph detected him/her as such? (Show
+me the table or the formulaic solution or both.)
+b. What is the probability that an individual is actually a truth-teller given that the polygraph detected him/her as
+such? (Show me the table or the formulaic solution or both.)
+c. What is the probability that a randomly selected individual is either a liar or was identified as a liar by the
+polygraph? Be sure to write the probability statement.
+
+### Answer
+
+$P(Liar) = 0.2$ and $P(Truth\ Teller) = 0.8$
+
+$P(Detect^-|Liar) = 0.59$, so $P(Detect^+|Liar) = 0.41$
+
+$P(Detect^+|Truth\ Teller) = 0.9$, so $P(Detect^-|Truth\ Teller) = 0.1$
+
+#### (a)
+
+Per Bayes' Theorem,
+
+$$
+\begin{split}
+P(Liar|Detect^-) &= \frac{P(Detect^-|Liar)\times P(Liar)}{P(Detect^-)} \\
+&= \frac{P(Detect^-|Liar)\times P(Liar)}{P(Liar)\times P(Detect^-|Liar)+P(Truth\ Teller)\times P(Detect^-|Truth\ Teller)} \\
+&= \frac{0.59\times0.2}{0.2\times0.59+0.8\times0.1}\\
+&=\frac{0.118}{0.198}\approx 0.596
+\end{split}
+$$
+
+#### (b)
+
+Per Bayes' Theorem,
+
+$$
+\begin{split}
+P(Truth\ Teller|Detect^+) &= \frac{P(Detect^+|Truth\ Teller)\times P(Truth\ Teller)}{P(Detect^+)} \\
+&= \frac{P(Detect^+|Truth\ Teller)\times P(Truth\ Teller)}{P(Liar)\times P(Detect^+|Liar)+P(Truth\ Teller)\times P(Detect^+|Truth\ Teller)} \\
+&= \frac{0.9\times0.8}{0.2\times0.41+0.8\times0.9} \\
+&=\frac{0.72}{0.802} \approx 0.8978
+\end{split}
+$$
+
+#### (c)
+
+$$
+\begin{split}
+P(Liar \cup Detect^-) &= P(Liar)+P(Detect^-)-P(Liar \cap Detect^-) \\
+&= P(Liar)+P(Detect^-)-P(Liar)\times P(Detect^-|Liar) \\
+&= 0.2+0.198-0.2 \times 0.59 \\
+&= 0.28
+\end{split}
+$$
