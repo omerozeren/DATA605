@@ -74,7 +74,7 @@ Determine if the following events are independent. Going to the gym. Losing weig
 Two events are independent if probability of one event is not affected by another event. In other words, if $A$ and $B$ are two events, then they are independent if $P(A) = P(A|B)$.
 
 
-It is a realistic assumption that $P(losing\ weight)$ will not be the same as $P(losing\ weight|going\ to\ gym)$, so events are likely **DEPENDENT**. Of course, without additional information we cannot be sure.
+It is a realistic assumption that $P(losing\ weight)$ will not be the same as $P(losing\ weight|going\ to\ gym)$, so events are likely **DEPENDENT**. 
 
 ## Problem 5
 
@@ -92,7 +92,7 @@ Jeff runs out of gas on the way to work. Liz watches the evening news.
 
 ### Answer
 
-Similarly to problem 4, it is a realistic assumption that Jeff running out of gas has no influence on Liz watching the news. $P(Liz\ watches\ the\ evening\ news)=P(Liz\ watches\ the\ evening\ news|Jeff\ runs\ out\ of\ gas\ on\ the\ way\ to\ work)$, so events are likely **INDEPENDENT**. Of course, without additional information we cannot be sure (for instance, Liz and Jeff can be related and Jeff's morning commute may influence Liz's evening schedule).
+Similarly to problem 4, it is a realistic assumption that Jeff running out of gas has no influence on Liz watching the news. $P(Liz\ watches\ the\ evening\ news)=P(Liz\ watches\ the\ evening\ news|Jeff\ runs\ out\ of\ gas\ on\ the\ way\ to\ work)$, so events are likely **INDEPENDENT**. 
 
 ## Problem 7
 
