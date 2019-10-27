@@ -1,0 +1,51 @@
+---
+title: "DATA 605 - Discussion 7"
+author: "Omer Ozeren"
+output:
+  word_document:
+    toc: yes
+    toc_depth: '3'
+  html_document:
+    highlight: tango
+    theme: journal
+    toc: yes
+    toc_depth: 5
+    toc_float: yes
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+### Chapter 5.2 Exercise 16
+
+Let $X$ be a random variable with density function $f_X(x)=\begin{cases} cx(1-x), &if\ 0 < x < 1,\\0, &otherwise.\end{cases}$
+
+a) What is the value of $c$?
+b) What is the cumulative distribution function $F_X$ for $X$?
+c) What is the probability that $X < 1/4$?
+
+#### Part (a)
+
+Probability density function must be positive and integrate to $1$.
+
+$\int_{0}^{1}cx(1-x) dx = \frac{c}{6}=1$, then $c=6$.
+
+
+
+
+So density function is $f_X(x)=\begin{cases} 6x(1-x), &if\ 0 < x < 1,\\0, &otherwise.\end{cases}$
+
+
+#### Part (b)
+
+$F_x = \int_{-\infty}^{x} f(t) dt$
+
+$\int f(x) dx = -6 (\frac{x^3}{3}-\frac{x^2}{2}) = -2x^3+3x^2 = x^2(3-2x)$
+
+Cumulative distribution function $F_X(x)=\begin{cases} x^2(3-2x), &if\ 0 < x < 1,\\0, &otherwise.\end{cases}$
+
+#### Part (c)
+
+$P(X < 1/4) = 0.25^2 \times (3-2 \times 0.25) = 0.15625$
+
+

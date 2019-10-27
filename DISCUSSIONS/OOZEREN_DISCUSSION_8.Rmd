@@ -1,0 +1,87 @@
+---
+title: "DATA 605 - Discussion 8"
+author: "Omer Ozeren"
+output:
+  word_document:
+    toc: yes
+    toc_depth: '3'
+  html_document:
+    highlight: tango
+    theme: journal
+    toc: yes
+    toc_depth: 5
+    toc_float: yes
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+## Chapter 8.2 Exercise 16
+
+Let $Z = X/Y$ where $X$ and $Y$ have normal densities with mean $0$ and standard
+deviation $1$. Then it can be shown that $Z$ has a Cauchy density.
+
+a. Write a program to illustrate this result by plotting a bar graph of 1000
+samples obtained by forming the ratio of two standard normal outcomes.
+Compare your bar graph with the graph of the Cauchy density. Depending
+upon which computer language you use, you may or may not need to
+tell the computer how to simulate a normal random variable. A method
+for doing this was described in Section 5.2.
+
+b. We have seen that the Law of Large Numbers does not apply to the
+Cauchy density. Simulate a large number of experiments
+with Cauchy density and compute the average of your results. Do
+these averages seem to be approaching a limit? If so can you explain
+why this might be?
+
+### Solution
+
+Below is histogram of the distribution of 1,000 outcomes of $x/y$ ratio, where $x$ and $y$ are both normally distributed with mean $0$ and standard deviation $1$.
+
+```{r}
+hist(rnorm(1000)/rnorm(1000), breaks=10000, xlim=c(-10,10),
+     xlab="", ylab="",
+     main="Histogram of X/Y Distribution")
+```
+
+Using R we can also display histogram of the proper Cauchy distribution. 
+
+```{r}
+hist(rcauchy(1000), breaks=10000, xlim=c(-10,10),
+     xlab="", ylab="",
+     main="Histogram of Cauchy Distribution")
+```
+
+We can see that the two histograms are very similar. 
+
+Now let us run the following simulation 2,000 times. Each run we will generate 1,000 outcomes and calculate the average. We then calculate the average between all runs up to the current one. According to the Law of Large Numbers, as number of runs increases the calculated value should approach the theoretical value. We do this for normal distribution and for the ratio.
+
+```{r}
+# Initialize vectors
+trials <- 2000
+dist_cauchy <- rep(0,trials)
+avg_cauchy <- rep(0,trials)
+dist_norm <- rep(0,trials)
+avg_norm <- rep(0,trials)
+# Simulated n trials and record average as number of trials increases
+for (n in 1:trials) {
+  dist_cauchy[n]<-mean(rnorm(1000)/rnorm(1000))
+  dist_norm[n]<-mean(rnorm(1000))
+  avg_cauchy[n]<-mean(dist_cauchy[1:n])
+  avg_norm[n]<-mean(dist_norm[1:n])
+}
+```
+
+If we plot the results of the simulated normal distribution, we can see that the value approaches $0$.
+
+```{r}
+plot(avg_norm, xlab="No of Trials", ylab="",
+     main="Estimate of Mean of Normal Distribution")
+```
+
+For the Cauchy distribution, average/mean is not defined. We can see from the plot that it does indeed jump around. 
+
+```{r}
+plot(avg_cauchy, xlab="No of Trials", ylab="",
+     main="Estimate of Mean of Cauchy Distribution")
+```
