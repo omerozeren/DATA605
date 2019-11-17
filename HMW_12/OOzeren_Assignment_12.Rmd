@@ -1,0 +1,139 @@
+---
+title: "DATA 605 - Homework 12"
+author: "Omer Ozeren"
+output:
+  word_document:
+    toc: yes
+    toc_depth: '3'
+  html_document:
+    highlight: tango
+    theme: journal
+    toc: yes
+    toc_depth: 5
+    toc_float: yes
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = F, message = F, collapse = T, cache = T)
+```
+
+```{r load-libraries}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(gvlma)
+library(gridExtra)
+```
+
+# Objective
+ 1. Provide a scatterplot of LifeExp~TotExp, and run simple linear regression. Do not transform the
+variables. Provide and interpret the F statistics, R^2, standard error,and p-values only. Discuss
+whether the assumptions of simple linear regression met.
+ 2. Raise life expectancy to the 4.6 power (i.e., LifeExp^4.6). Raise total expenditures to the 0.06
+power (nearly a log transform, TotExp^.06). Plot LifeExp^4.6 as a function of TotExp^.06, and r
+re-run the simple regression model using the transformed variables. Provide and interpret the F
+statistics, R^2, standard error, and p-values. Which model is "better?"
+ 3. Using the results from 3, forecast life expectancy when TotExp^.06 =1.5. Then forecast life
+expectancy when TotExp^.06=2.5.
+ 4. Build the following multiple regression model and interpret the F Statistics, R^2, standard error,
+and p-values. How good is the model?\
+LifeExp = b0+b1 x PropMd + b2 x TotExp +b3 x PropMD x TotExp
+ 5. Forecast LifeExp when PropMD=.03 and TotExp = 14. Does this forecast seem realistic? Why
+or why not?
+
+## Question 1. 
+
+Provide a scatterplot of LifeExp~TotExp, and run simple linear regression. Do not transform the variables. Provide and interpret the F statistics, R^2, standard error,and p-values only. Discuss whether the assumptions of simple linear regression met.
+
+### Scatterplot
+```{r who_df}
+library(knitr)
+url <- "C:/Users/OMERO/Desktop/who.csv"
+who_df  <- read.csv(file = url, header = T, stringsAsFactors = F)
+summary(who_df)
+kable(head(who_df))
+#scatter plot
+plot(who_df$LifeExp, who_df$TotExp, main="Scatterplot", 
+    xlab="Life Expectancy ", ylab="Total Expenidutres ", pch=19) 
+#simple linear regression
+lm_who_df <- lm(who_df$LifeExp ~ who_df$TotExp)
+abline(who_df, col = "red")
+#residuals
+hist(resid(lm_who_df), main = "Histogram of Residuals", xlab = "residuals")
+#summary
+summary(lm_who_df)
+```
+
+## Question 2. 
+
+Raise life expectancy to the 4.6 power (i.e., LifeExp^4.6). Raise total expenditures to the 0.06 power (nearly a log transform, TotExp^.06). Plot LifeExp^4.6 as a function of TotExp^.06, and r re-run the simple regression model using the transformed variables. Provide and interpret the F statistics, R^2, standard error, and p-values. Which model is "better?"
+
+
+
+```{r who_df2}
+#simple linear regression
+x <- who_df$LifeExp^4.6
+y <- who_df$TotExp^0.06
+lm_who_df2 <- lm(x ~ y)
+#scatter plot
+plot(x, y, main="Scatterplot 2", 
+    xlab="Life Expectancy ", ylab="Total Expenidutres ", pch=19) 
+abline(lm_who_df2, col = "red")
+#residuals
+hist(resid(lm_who_df2), main = "Histogram of Residuals", xlab = "residuals")
+#summary
+summary(lm_who_df2)
+plot(fitted(lm_who_df2), resid(lm_who_df2))
+plot(fitted(lm_who_df2), resid(lm_who_df2))
+```
+
+Model2 is highly different and better compared to Model1. Adjusted Rsquare is 72% whereas Model1 is only 25%. There seems to be a good correlation. p-value is less in Model2 compared to Model1. F-stat is 507 in model2 whereas only 65 in Model1. Residual standard error is high in Model2 and normally distributed in Model2. 
+
+## Question 3. 
+
+Using the results from 3, forecast life expectancy when TotExp^.06 =1.5. 
+**Then forecast life expectancy when TotExp^.06=2.5.**
+
+$$y= -736527910  + 620060216 x$$
+
+
+$$life expectancy = y^(1/4.6)$$
+
+```{r rwd3}
+le <- function(fc)
+{   y <- -736527910 + 620060216 * (fc)
+    y <- y^(1/4.6)
+    print(y)
+}
+#Life expectancy when TotExp^.06 =1.5
+le(1.5)
+#Life expectancy when TotExp^.06 =2.5
+le(2.5)
+```
+## Question 4. 
+
+Build the following multiple regression model and interpret the F Statistics, R^2, standard error, and p-values. How good is the model?
+
+**LifeExp = b0+b1 x PropMd + b2 x TotExp +b3 x PropMD x TotExp**
+
+```{r rwd4}
+lm_fit3 <- lm(who_df$LifeExp ~ who_df$PropMD + who_df$TotExp + who_df$PropMD*who_df$TotExp)
+summary(lm_fit3)
+hist(resid(lm_fit3), main = "Histogram of Residuals", xlab = "residuals")
+plot(fitted(lm_fit3), resid(lm_fit3))
+```
+
+
+      
+p-value is less than .05. model is statistically significant. F-statistic is 34.49 by adding 3 variables. Based on Rsquare only 35% of the variability can be explained by 3 variables. Correlation is moderate in this case. Residuals is right skewed. So, linear model is not valid.	  
+
+### Question 5. 
+
+Forecast LifeExp when PropMD=.03 and TotExp = 14. Does this forecast seem realistic? Why or why not?
+
+
+$$LifeExp = 6.277 * 10^1 + 1.497*10^3 * PropMD + 7.233* 10^-5 TotExp-6.026*10^-3 *PropMD*TotExp$$
+```{r rwd5}
+LE <- ( (6.277*10^1) + (1.497*10^3)*.03 + (7.233*10^(-5))*14 - ((6.026*10^(-3))*0.03*14) ) 
+LE
+```
+This prediction does not seem realistic, since the total personal and government expenditure is near the minimum, yet life expentancy exceeds that of any country in the dataset.Hence, The forecast age 107.6 is an outlier and seems to be unrealistic. The expenditure is also low. 
