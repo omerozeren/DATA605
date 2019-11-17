@@ -1,0 +1,126 @@
+---
+title: "DATA 605 - Discussion 12"
+author: "Omer Ozeren"
+output:
+  word_document:
+    toc: yes
+    toc_depth: '3'
+  html_document:
+    highlight: tango
+    theme: journal
+    toc: yes
+    toc_depth: 5
+    toc_float: yes
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+## Objective
+Using R, build a multiple regression model for data that interests you.  Include in this model at least one quadratic term, one dichotomous term, and one dichotomous vs. quantitative interaction term.  Interpret all coefficients. Conduct residual analysis.  Was the linear model appropriate? Why or why not?
+
+I am using salary data that include observations on six variables for 52 tenure-track professors in a small college.
+The original data also can be found in "http://data.princeton.edu/wws509/datasets/"
+
+The variables are:
+
+- `sx`: Sex, coded 1 for female and 0 for male
+- `rk`: Rank, coded 1 for assistant professor, 2 for associate professor, and 3 for full professor
+- `yr`: Number of years in current rank
+- `dg`: Highest degree, coded 1 if doctorate, 0 if masters
+- `yd`: Number of years since highest degree was earned
+- `sl`: Academic year salary, in dollars.
+
+## Data Import
+```{r}
+# Data import
+library(foreign)
+salary <- read.dta("http://data.princeton.edu/wws509/datasets/salary.dta")
+# Summary of Salary Data
+summary(salary)
+# Data sample
+knitr::kable(head(salary))
+```
+
+## Data Engineering : Sex (`sx`) will be  **dichotomous** variable.
+
+Convert *sex* and *rank* into numerical representation. 
+
+```{r}
+salary$sx <- as.character(salary$sx)
+salary$sx[salary$sx == "Male"] <- 0
+salary$sx[salary$sx == "Female"] <- 1
+salary$sx <- as.integer(salary$sx)
+salary$rk <- as.character(salary$rk)
+salary$rk[salary$rk == "Assistant"] <- 1
+salary$rk[salary$rk == "Associate"] <- 2
+salary$rk[salary$rk == "Full"] <- 3
+salary$rk <- as.integer(salary$rk)
+```
+
+## Iniitial Model
+```{r}
+# Quadratic variable
+rk2 <- salary$rk^2
+sx_yd <- salary$sx * salary$yd
+
+# Initial model
+salary_lm <- lm(sl ~ sx + rk + rk2 + yr + dg + yd + sx_yd, data=salary)
+summary(salary_lm)
+```
+
+Perform **backwards elimination** - removing one variable (the one with highest p-value) at a time. Removing *sex*.
+
+```{r}
+# Version 2
+salary_lm <- update(salary_lm, .~. -sx)
+summary(salary_lm)
+```
+
+Removing *square of rank*.
+
+```{r}
+# Version 3
+salary_lm <- update(salary_lm, .~. -rk2)
+summary(salary_lm)
+```
+
+Removing *highest degree*.
+
+```{r}
+# Version 4
+salary_lm <- update(salary_lm, .~. -dg)
+summary(salary_lm)
+```
+
+Removing *interaction between sex and number of years since highest degree was earned*.
+
+```{r}
+# Version 5
+salary_lm <- update(salary_lm, .~. -sx_yd)
+summary(salary_lm)
+```
+
+Removing *number of years since highest degree was earned*.
+
+```{r}
+# Version 6
+salary_lm <- update(salary_lm, .~. -yd)
+summary(salary_lm)
+```
+
+## Summary of Model Results
+
+The final model has two variables - *rank* and *number of years in current rank* - that can be used to predict the target variable.
+
+Two coefficients imply that for every increase in rank the salary increases by $4,731.26 and with every year in the current rank the salary increases by $376.50.
+
+Based on the Residuals vs. Fitted plot below there are some outliers in the data, but overall variability is fairly consistent. Based on the Q-Q plot, distribution of residuals is close to normal.
+
+Based on $R^2$ value, the model explains 84.36% of variability in the data. 
+
+```{r}
+plot(salary_lm$fitted.values, salary_lm$residuals, xlab="Fitted Values", ylab="Residuals", main="Residuals vs. Fitted")
+abline(h=0)
+qqnorm(salary_lm$residuals)
+qqline(salary_lm$residuals)
+```
