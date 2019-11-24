@@ -1,0 +1,176 @@
+---
+title: "DATA 605 - Homework 13"
+author: "Omer Ozeren"
+output:
+  word_document:
+    toc: yes
+    toc_depth: '3'
+  html_document:
+    highlight: tango
+    theme: journal
+    toc: yes
+    toc_depth: 5
+    toc_float: yes
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = F, message = F, collapse = T, cache = T)
+```
+
+```{r}
+library(ggplot2)
+```
+
+## Question 1. 
+Use integration by substitution to solve the integral $\int 4e^{-7x}dx$
+
+### Answer
+Let $u = -7x$. Then $du = -7 dx \ \to \ dx = \frac{du}{-7}$.
+
+Our integral is now $\int \frac{4e^{u}du}{-7}$. Taking out the constants: $\frac{4}{-7}\int e^u du$.
+
+Replacing $u$ with our original substitution: $\frac{-4}{7}e^{-7x} + C$.
+
+## Question 2. 
+Biologists are treating a pond contaminated with bacteria. The level of contamination is changing at a rate of $\frac{\text{d}N}{\text{d}t} = -\frac{3150}{t^4} - 220$ bacteria per cubic centimeter per day, where $t$ is the number of days since treatment began. Find a function $N(t)$ to estimate the level of contamination if the level after day 1 was 6530 per cubic centimeter.
+
+### Answer
+\[
+\frac{\text{d}N}{\text{d}t} = -\frac{3150}{t^4} - 220 \ \to \ \text{d}N = (-\frac{3150}{t^4}-220)\text{d}t
+\]
+
+To find $N$, we can take the antiderivative, i.e. the integral.
+
+$N = \int (-\frac{3150}{t^4}-220)\text{d}t \ \ = \int -3150(t^{-4}) \text{d}t - \int 220\text{d}t$
+
+Using the power rule for integration: $N = \frac{-3150}{-3}(t^{-3}) - 220t + C$.
+
+Solving for $N(1) = 6530$:
+
+$N(1) \frac{-3150}{-3}(1^{-3}) - 220(1) + C = 6530$
+
+$C = 6530 - 1050 + 220 = 5700$.
+
+$N(t) = -1050(t^{-3}) - 200(t) + 5700$.
+
+## Question 3.
+Find the total area of the red rectangles in the figure below, where the equation of the lines is $f(x) = 2x - 9$.
+
+
+### Answer
+The equation is given as $2x - 9$, and the ends of the rectangles look to be 4.5 and 8.5. Since we're looking for the area, we can integrate this function over these boundaries.
+
+\[
+\int_{4.5}^{8.5}(2x - 9)dx
+\]
+
+Using the power rule for integration:
+
+\[
+(x^2 - 9x)\Big|_{4.5}^{8.5} = \Big[(8.5)^2 - 9(8.5)\Big] - \Big[(4.5)^2 - 9(4.5)\Big]
+\\
+= [72.25 - 76.5] - [20.25 - 40.5] = 16
+\]
+
+## Question 4. 
+
+Find the area of the region bounded by the graphs of the given equations.
+
+$y = x^2 - 2x - 2, y = x + 2$
+
+### Answer:
+
+
+
+- Solving for x gives
+
+$$
+\begin{aligned}
+x + 2 = x^2 -2x - 2 \\
+x^2 - 3x - 4 = 0 \\
+(x-4)(x+1) = 0 \\
+x=4, x = -1
+\end{aligned}
+$$
+
+- Now that I have the endpoints, I can compute and plot or graph the two functions
+and see that $x+2 \geq x^2-2x-2$ for all x $\epsilon [-1,4]$.
+
+- Both functions are continous everywhere in the region and we can find the area between curves as
+
+- $\int^{4}_{-1} (x+2 - (x^2-2x-2)) \,dx$ Solving the integral gives
+
+$$
+\begin{aligned}
+\int^{4}_{-1} (x+2 - (x^2-2x-2)) \,dx \\
+= \int^{4}_{-1} -x^2 + 3x + 4 \,dx \\
+= \big[-x^3/3 + 3x^2/2 + 4x\big]^4_{-1} \\
+= -64/3 + 24 + 16 - (1/3 + 3/2 - 4) \approx 20.833
+\end{aligned}
+$$
+
+
+##Question 5. 
+
+A beauty supply store expects to sell 110 flat irons during the next year. It costs $3.75 
+to store one flat iron for one year. There is a fixed cost of $8.25 for each order. Find the
+lot size and number of orders per year that will minimize inventory costs.
+
+### Answer:
+
+lot size = x units/order
+Annual Cost = Annual storage cost * Average no. of items carried out a year
+Annual Cost = 3.75.x/2 =1.875x
+$$Annual Order Cost = Cost of Order * number of orders/year  = (8.25 * 110/x)$$
+$$Total inventory cost = 1.875x + (8.25 * 110/x)$$
+$$y = 1.875x + (907.5/x)$$
+$$y` = 1.875x + (907.5/x) = 0$$
+$$ 1.875 - (907.5/x^2) = 0 $$
+$$ x^2= 907.5/1.875 $$
+$$ x^2= 206.25 $$
+```{r c5}
+A <- sqrt(206.25)
+A
+```
+lot size =14.36/order
+```{r c5.1}
+
+
+ordperyear <- 110/14.36
+ordperyear
+```
+Orders per year = 7.6
+
+
+## Question 6. 
+
+Use integration by parts to solve the integral below.
+$$ \int  ln(9x).x^6 dx$$ 
+
+### Answer:
+
+$$U = ln(9x)$$
+$$dU = \frac {1} {x} dx $$
+$$dV = x^6dx$$
+$$V = \frac {1} {7} x^7$$
+$$UdV = UV - \int VdU $$
+$$ ln(9x)\frac {1} {7} x^7 -  \int \frac {1} {7} x^7 \frac {1} {x} dx$$
+$$ \frac {1} {7} ln(9x) x^7 -   \frac {1} {7} \int x^6  dx$$
+$$ \frac {1} {7}x^7[ln(9x)] - \frac {1} {7}    ] dx$$
+
+## Question 7.
+Determine whether f(x) is a probability density function on the interval $[1, e^6]$.
+If not, determine the value of the definite integral.
+
+$f(x) = 1/6x$
+
+
+### Answer :
+- Compute $\int^{e^6}_{1} 1/6x \,dx$
+
+$$
+\begin{aligned}
+\int^{e^6}_{1} 1/6x \,dx = \big[\ln(6x) \big]^{e^6}_1 \\
+= \ln(6e^6) - \ln(6) \\
+\ln(6) + \ln(e^6) - \ln(6) = 6 \neq 1
+\end{aligned}
+$$
