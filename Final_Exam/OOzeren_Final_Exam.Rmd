@@ -13,19 +13,23 @@ output:
     toc_depth: '3'
 ---
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(warning = F, message = F, collapse = T, cache = T)
+knitr::opts_chunk$set(echo = TRUE)
+options(scipen=16)
 ```
+
 ## Problem 1 :
 
 Using R, generate a random variable X that has 10,000 random uniform numbers from 1 to N, where N can be any number of your choosing greater than or equal to 6.  Then generate a random variable Y that has 10,000 random normal numbers with a mean of mean=std=(N+1)/2
 
 ```{r data}
-#10,000 random uniform numbers from 1 to 7
-N=20
+#10,000 random uniform numbers from 1 to N
+N=9
 # 10,000 random uniform numbers from 1 to N
-X = runif(1000, 1,N)
+X = runif(10000, 1,N)
 # 10,000 random normal numbers with a mean of mean=std=(N+1)/2
-Y = rnorm(1000, (N+1)/2, (N+1)/2)
+mu <- (N+1)/2
+std <- (N+1)/2
+Y = rnorm(10000, mean = mu,sd = std)
 ```
 ##Probability
 
@@ -68,7 +72,7 @@ P(Y > y) = 0.75
 P(X > x \ and \ Y > y) = (0.5)(0.75) =0.375
 \]
 
-### C: $$P(X<x|Y>y)$$
+### C: $$P(X<x|X>y)$$
 
 ```{r}
 XGy <- length(which(X>y))
@@ -76,3 +80,62 @@ XGy_xGX <- length(which(X>y & X<x))
 
 XGy_xGX/XGy
 ```
+
+**Investigate whether P(X>x and Y>y)=P(X>x)P(Y>y) by building a table and evaluating the marginal and joint probabilities.**
+
+```{r}
+tab <- c(sum(X<x & Y < y),
+       sum(X < x & Y == y),
+       sum(X < x & Y > y))
+tab <- rbind(tab,
+              c(sum(X==x & Y < y),
+       sum(X == x & Y == y),
+       sum(X == x & Y > y))
+             
+             )
+tab <- rbind(tab,
+              c(sum(X>x & Y < y),
+       sum(X > x & Y == y),
+       sum(X > x & Y > y))
+             )
+tab <- cbind(tab, tab[,1] + tab[,2] + tab[,3])
+tab <- rbind(tab, tab[1,] + tab[2,] + tab[3,])
+colnames(tab) <- c("Y<y", "Y=y", "Y>y", "Total")
+rownames(tab) <- c("X<x", "X=x", "X>x", "Total")
+knitr::kable(tab)
+```
+
+```{r}
+# P(X>x and Y>y)
+3747/10000
+#P(X>x)P(Y>y)
+((5000)/10000)*(7500/10000)
+```
+
+we can see that the condition holds since  P(X>x and Y>y) =  0.3754 and P(X>x)P(Y>y) = 0.375 are approximately equal.
+
+**Check to see if independence holds by using Fisher's Exact Test and the Chi Square Test.  What is the difference between the two? Which is most** **appropriate?**
+
+Fisher's Exact Test
+```{r}
+fisher.test(table(X>x,Y>y))
+```
+The p-value is greater than zero we don't reject the null hypothesis. Two events are independent.
+
+The Chi Square Test
+
+```{r}
+chisq.test(table(X>x,Y>y))
+```
+The p-value is greeter than zero we don't reject the null hypothesis. Two events are independent.
+
+Fisher's exact test the null of independence of rows and columns in a contingency table with fixed marginals.
+
+Chi-squared test tests contingency table tests and goodness-of-fit tests.
+
+Fisher's exact test is appropriate here. Since the contingency table are fixed here in the table.
+
+## Problem 2
+
+You are to register for Kaggle.com (free) and compete in the House Prices: Advanced Regression Techniques competition.  https://www.kaggle.com/c/house-prices-advanced-regression-techniques .  I want you to do the following.
+
