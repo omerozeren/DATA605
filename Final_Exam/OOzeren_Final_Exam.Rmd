@@ -8,6 +8,9 @@ output:
     toc: yes
     toc_depth: 5
     toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
   word_document:
     toc: yes
     toc_depth: '3'
@@ -31,7 +34,7 @@ mu <- (N+1)/2
 std <- (N+1)/2
 Y = rnorm(10000, mean = mu,sd = std)
 ```
-##Probability
+### Probability
 
 Calculate as a minimum the below probabilities a through c.  Assume the small letter "x" is estimated as the median of the X variable, and the small letter "y" is estimated as the 1st quartile of the Y variable.  Interpret the meaning of all probabilities
 
@@ -81,7 +84,8 @@ XGy_xGX <- length(which(X>y & X<x))
 XGy_xGX/XGy
 ```
 
-**Investigate whether P(X>x and Y>y)=P(X>x)P(Y>y) by building a table and evaluating the marginal and joint probabilities.**
+## 5 points.
+Investigate whether P(X>x and Y>y)=P(X>x)P(Y>y) by building a table and evaluating the marginal and joint probabilities**
 
 ```{r}
 tab <- c(sum(X<x & Y < y),
@@ -114,7 +118,8 @@ knitr::kable(tab)
 
 we can see that the condition holds since  P(X>x and Y>y) =  0.3754 and P(X>x)P(Y>y) = 0.375 are approximately equal.
 
-**Check to see if independence holds by using Fisher's Exact Test and the Chi Square Test.  What is the difference between the two? Which is most** **appropriate?**
+## 5 points.
+Check to see if independence holds by using Fisher's Exact Test and the Chi Square Test.  What is the difference between the two? Which is most appropriate?
 
 Fisher's Exact Test
 ```{r}
@@ -139,3 +144,299 @@ Fisher's exact test is appropriate here. Since the contingency table are fixed h
 
 You are to register for Kaggle.com (free) and compete in the House Prices: Advanced Regression Techniques competition.  https://www.kaggle.com/c/house-prices-advanced-regression-techniques .  I want you to do the following.
 
+Load the libraries
+```{r}
+library(readr)
+library(tidyverse)
+library(ggcorrplot)
+```
+
+### Load Data from Kaggle
+
+
+```{r}
+# Load training data from GitHub
+path <- ('https://raw.githubusercontent.com/omerozeren/DATA605/master/Final_Exam/train.csv')
+con <- file(path, open="r")
+train <- read.csv(con, header=T, stringsAsFactors = F)
+close(con)
+
+# Load test data from GitHub
+path <- ('https://raw.githubusercontent.com/omerozeren/DATA605/master/Final_Exam/test.csv')
+con <- file(path, open="r")
+test <- read.csv(con, header=T, stringsAsFactors = F)
+close(con)
+```
+
+
+##5 points.
+Descriptive and Inferential Statistics.
+
+Provide univariate descriptive statistics and appropriate plots for the training data set.  Provide a scatterplot matrix for at least **two** of the independent variables and the dependent variable. Derive a correlation matrix for any **three** quantitative variables in the dataset.  Test the hypotheses that the correlations between each pairwise set of variables is 0 and provide an 80% confidence interval.  Discuss the meaning of your analysis.  Would you be worried about familywise error? Why or why not?
+
+
+
+**Summary of Train Data**
+```{r}
+summary(train)
+```
+**Plots of Train Data**
+
+```{r}
+hist(train$MSSubClass, main="Distribution of MSSubClass",xlab="MSSubClass")
+```
+
+MSSubClass is left skewed.
+
+```{r}
+barplot(table(train$MSZoning), main="MS Zoning")
+```
+RL has the highest frequency , C lowest frequency.
+
+```{r}
+hist(train$LotFrontage,main="Histogram of Lot Frontage",xlab="LotFrontage")
+```
+LotFrontage is left skewed.
+
+```{r}
+hist(train$LotArea,main="Distribution of LotArea",xlab="Lot Area")
+```
+
+Lot Area is left skewed with very high small values.
+
+```{r}
+hist(train$SalePrice,main="Distribution of Sale Price",xlab="Sale Price")
+```
+
+Sales price is slightly approximately normally distributed.
+.
+```{r}
+hist(train$GrLivArea,main="Distribution of Ground Living Area",xlab="Ground Living Area")
+```
+
+Ground Living Area is approximately normally distributed.
+
+**Since the SalePrice column will be the target variable, we'll start there and look at how it is distributed.**
+```{r}
+# Plot SalePrice
+train %>% ggplot(aes(y=SalePrice)) + 
+  geom_boxplot(outlier.color="blue", outlier.alpha = 0.2) +
+  scale_x_discrete() +
+  stat_boxplot(geom ='errorbar',width=.3) +
+  labs(title="Distribution of Sale Price",
+       subtitle="Homes", y="Price($)",
+       x="Homes") + theme_classic()
+```
+
+The Plot above displays that the mean price of houses below $200K and they are mostly evenly distributed with some significant outliers above $600K range.
+
+### ScatterPlot
+
+**Scatterplot matrix for "SalePrice","GrLivArea","LotFrontage"**
+
+```{r}
+pairs(train[,c("SalePrice","GrLivArea","LotFrontage")])
+```
+
+
+**From the scatter plot we can see that GrLiveArea and LotFrontage are positively correlated with Sale Price.**
+**Since Most of the sale prices are concentrated between 100k and 300k, while the lot sizes have much less spread.**
+**The larger lot sizes do not necessarily belong to the most expensive properties, which is why we do not see a stronger correlation.**
+
+
+### Correlation matrix
+
+```{r}
+cormat <- cor(train[,c("SalePrice","GrLivArea","TotalBsmtSF")])
+cormat
+```
+
+```{r}
+# Subset of variables
+train_cor <- train  %>% dplyr::select(SalePrice, GrLivArea, TotalBsmtSF)
+
+# Compute correlations
+corr <- cor(train_cor)
+ggcorrplot(corr,lab=TRUE, ggtheme = ggplot2::theme_classic) +
+  labs(title="Correlation",subtitle="All Houses")
+```
+
+**The graph above displays that Sale Price shows strong positive correlation with "GrLivArea"" and moderate correlation with TotalBsmTSF.**
+**In Addition,"GrLivArea"" shows Strong positive correlation with SalePrice and weak positive correlation with "TotalBsmSF" and also**
+**"TotalBsmSF"" shows moderate positive correlation with SalePrice and weak positive correlation with "GrLivArea".**
+
+### Hypothesis and 80% confidence interval
+Test the hypotheses that the correlations between each pairwise set of variables is 0 and provide an 80% confidence interval.Discuss the meaning of your analysis.  Would you be worried about familywise error? Why or why not?
+
+Null (Ho) Hypothesis: The correlation between GrLivArea and SalePrice is 0 
+Alternative(H1) Hypothesis: The correlation between GrLivArea and SalePrice is other than 0
+
+```{r}
+cor.test(train$GrLivArea, train$TotalBsmtSF, conf.level = 0.8)
+```
+Since the the p value of the test is less than 0.05 at 5% level of significance we reject the null hypothesis and conclude that the  correlation between **GrLivArea** and **TotalBsmtSF** is other than 0.
+
+80 percent confidence interval of the test is 0.4327076 0.4879552
+
+
+
+
+```{r}
+cor.test(train$SalePrice, train$TotalBsmtSF, conf.level = 0.8)
+```
+Since the the p value of the test is less than 0.05 at 5% level of significance we reject the null hypothesis and conclude that the  correlation between **SalePrice** and **TotalBsmtSF** is other than 0.
+
+80 percent confidence interval of the test is 0.5922142 0.6340846
+
+
+```{r}
+cor.test(train$SalePrice, train$GrLivArea, conf.level = 0.8)
+```
+Since the the p value of the test is less than 0.05 at 5% level of significance we reject the null hypothesis and conclude that the  correlation between **SalePrice** and **GrLivArea** is other than 0.
+
+80 percent confidence interval of the test is 0.6915087 0.7249450
+
+### Familywise Error
+type I error is the rejection of a true null hypothesis (also known as a "false positive" finding or conclusion)
+
+```{r}
+FWE <- 1 - (1 - .05)^2 
+FWE
+```
+
+There is a 9.75% chance of type 1 error. Since the chance is low I will not be worried for family wise error .
+
+## 5 points. 
+Linear Algebra and Correlation.  
+
+Invert your correlation matrix from above. (This is known as the precision matrix and contains variance inflation factors on the diagonal.) Multiply the correlation matrix by the precision matrix, and then multiply the precision matrix by the correlation matrix. Conduct LU decomposition on the matrix.  
+
+Invert your correlation matrix.This is known as the precision matrix and contains variance inflation factors on the diagonal.
+```{r}
+# find inverse
+precision_mat <- solve(cormat)
+```
+
+Multiply the correlation matrix by the precision matrix, and then multiply the precision matrix by the correlation matrix.
+```{r}
+# Multiply the correlation matrix by the precision matrix
+cor_prec <- cormat %*% precision_mat
+cor_prec
+#  multiply the precision matrix by the correlation matrix
+prec_cor <-   precision_mat %*% cormat
+prec_cor
+# LU Decomposistion
+library(pracma)
+lu(cormat)
+```
+## Calculus-Based Probability & Statistics.
+Many times, it makes sense to fit a closed form distribution to data.  Select a variable in the Kaggle.com training dataset that is skewed to the right, shift it so that the minimum value is absolutely above zero if necessary.  Then load the MASS package and run fitdistr to fit an exponential probability density function.  (See  https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/fitdistr.html ).  Find the optimal value of ??? for this distribution, and then take 1000 samples from this exponential distribution using this value (e.g., rexp(1000, ???)).  Plot a histogram and compare it with a histogram of your original variable.   Using the exponential pdf, find the 5th and 95th percentiles using the cumulative distribution function (CDF).   Also generate a 95% confidence interval from the empirical data, assuming normality.  Finally, provide the empirical 5th percentile and 95th percentile of the data.  Discuss.
+
+```{r}
+library(MASS)
+```
+### Univariate distribution of LotArea
+```{r}
+(expdf <- fitdistr(train$LotArea, "exponential"))
+```
+
+```{r}
+# get value of lambda from exponential distribution
+lambda <- expdf$estimate
+
+# expected value of lambda
+rate <- 1 / lambda
+rate
+```
+**Then, take 1000 samples from this exponential distribution using this value. (e.g., rexp(1000, some_val))((()))**
+```{r}
+# 1000 samples from exponential distribution using lambda
+expdf_samp <- rexp(1000, lambda)
+```
+**Plot a histogram and compare it with a histogram of your original variable.**
+```{r}
+# Actual vs simulated distribution
+hist(train$LotArea, breaks=50, prob=TRUE,col="royalblue", xlab="Actual Lot Area",
+     main="Lot Area Distribution")
+hist(expdf_samp, breaks=50, prob=TRUE,col="royalblue", xlab="Generated(Estimated) Data",
+     main="Generated(Estimated) Data's Distribution")
+```
+
+As we can see plots here that our Lot Area approximately fits a exponential distribution. The fit does not do good job here.Let's look at the
+summary table to understand the details
+```{r}
+# Actuals Data summary Table
+summary(expdf_samp)
+# Generated Data summary Table
+summary(train$LotArea)
+```
+## CDF
+
+5th and 95th percentiles using the cumulative distribution function (CDF)
+```{r}
+# 5 and 95 percentile of exponential pdf
+qexp(c(.05, .95), rate = lambda)
+```
+Also generate a 95% confidence interval from the empirical data, assuming normality
+```{r}
+# 95% confidence interval for sample mean (assuming normality)
+func <- qnorm(0.95)
+a <- func * sd(train$LotArea)/sqrt(length(train$LotArea))
+paste("CI for Population Mean: ",round(mean(train$LotArea - a),2)," - ",
+      round(mean(train$LotArea + a),2),sep='')
+```
+## Modeling
+In Model Data engineering part,I initiall start to find the variables with very large number of missing values.Below table show missing values in traindata
+```{r}
+#Missing values table
+sapply(train, function(x){sum(is.na(x))})
+```
+By looking at the table, I will remove the columns that have large missings from train and test data sets
+```{r}
+train <-train[, !colnames(train) %in% c("Id","Alley","PoolQC","Fence","MiscFeature","FireplaceQu","LotFrontage","YearBuilt","YearRemodAdd")]
+
+test <- test[, !colnames(test) %in% c("Alley","PoolQC","Fence","MiscFeature","FireplaceQu","LotFrontage","YearBuilt","YearRemodAdd")]
+```
+The next step is Encoding "converting categoricals to numerics"
+```{r}
+# Encoding
+
+train <- train%>%
+  mutate_if(is.character, as.factor)%>%
+  mutate_if(is.factor, as.integer)
+
+test <- test %>%
+   mutate_if(is.character, as.factor)%>%
+  mutate_if(is.factor, as.integer)
+```
+
+```{r}
+# omit the missing values in train data and test
+train <- na.omit(train)
+# Replace numeric NAs with 0
+test <- test %>% mutate_if(is.numeric, ~replace(., is.na(.), 0))
+```
+### I'll now do a stepwise regression based on ACI criterion
+```{r}
+model_fit <- lm(SalePrice~., data = train)
+step_model <- step(model_fit, trace = 0)
+summary(step_model)
+```
+### Residual Analysis
+```{r}
+par(mfrow=c(2,2))
+plot(step_model)
+```
+The residuals are approximately normally distributed. There is not heteroscedacity and pattern in the residuals.
+
+```{r}
+forecast <- predict(step_model, test)
+results <- data.frame(Id = test$Id, SalePrice=forecast)
+```
+### Export submission
+```{r}
+#Write to .csv for submission to Kaggle
+write.csv(results, file = "submission_omerozeren.csv", row.names = FALSE)
+```
+### Kaggle Submission
+My Kaggle user name is **omerozeren**, and the resulting score on Kaggle.com from this model is **0.21620**.
